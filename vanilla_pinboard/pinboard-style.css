@@ -1,0 +1,73 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #EFEFEF;
+}
+
+body.dragging-mode {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+#pinboard {
+    min-height: 100%;
+    height: auto !important;
+    heught: 100%;
+    overflow: hidden !important;
+}
+
+.toolbar-container {
+    background-color: rgba(66, 66, 66, 0.7);
+    padding: 0.5em;
+}
+
+.toolbar {
+    list-style: none;
+}
+
+.toolbar a {
+    color: black;
+}
+
+.toolbar > li {
+    float: left;
+    padding: 0.3em 0.2em;
+}
+
+.toolbar > li:not(:last-of-type) {
+    margin-right: 1em;
+}
+
+.toolbar:after {
+    content: "";
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+#pinboard section {
+    border: 1px solid black;
+    box-shadow: 0.125em 0.125em 0.3em #666;
+    width: 200px;
+    height: 120px;
+    position: absolute;
+}
+
+#pinboard section > header {
+    width: 100%;
+    height: 23px;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: move;
+}
