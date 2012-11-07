@@ -14,11 +14,12 @@
             ,btnClose = document.createElement("button");
 
         // events
-        var mousePressed = false,
-            prevMousePos,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove;
+        var mousePressed = false
+            ,prevMousePos
+            ,onMouseDown
+            ,onMouseUp
+            ,onMouseMove
+            ,onCloseClick;
 
         header.setAttribute("class", "header");
 
@@ -80,9 +81,17 @@
 
             prevMousePos = curMousePos;
         }
+        
+        onCloseClick = function(e) {
+            header.removeEventListener("mousedown", onMouseDown);
+            header.removeEventListener("mouseup", onMouseUp);
+            btnClose.removeEventListener("click", onCloseClick);
+            container.parentNode.removeChild(container);
+        };
 
         header.addEventListener("mousedown", onMouseDown);
         header.addEventListener("mouseup", onMouseUp);
+        btnClose.addEventListener("click", onCloseClick);
     }
 
     btnCreate.addEventListener("click", createNote)
