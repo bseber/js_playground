@@ -32,6 +32,7 @@
         container.appendChild(content);
 
         btnClose.setAttribute("class", "btn-close");
+        btnClose.setAttribute("title", "close");
         btnClose.innerHTML = "x";
 
         toolbar.setAttribute("class", "toolbar");
