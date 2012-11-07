@@ -48,6 +48,9 @@
 
             mousePressed = true;
             prevMousePos = {left: e.clientX, top: e.clientY};
+            
+            var curContainerClass = container.getAttribute("class");
+            container.setAttribute("class", curContainerClass ? curContainerClass + " dragging" : "dragging");
 
             var curBodyClass = document.body.getAttribute("class");
             document.body.setAttribute("class", curBodyClass ? curBodyClass + " dragging-mode" : "dragging-mode");
@@ -59,6 +62,8 @@
             e.stopPropagation();
 
             mousePressed = false;
+
+            container.setAttribute("class", container.getAttribute("class").replace("dragging", ""));
 
             document.body.setAttribute("class", document.body.getAttribute("class").replace("dragging-mode", ""));
             document.body.removeEventListener("mousemove", onMouseMove);
