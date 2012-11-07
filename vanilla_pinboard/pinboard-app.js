@@ -2,7 +2,28 @@
     "use strict";
 
     var pinboard   = document.getElementById("pinboard")
-        ,btnCreate = document.getElementById("btn-create");
+        ,btnCreate = document.getElementById("btn-create")
+        ,highestZ  = 42; // random number
+
+    function addClass(el, className) {
+        var classNames = el.getAttribute("class");
+        classNames = classNames ? classNames.split(" ") : [];
+        classNames[classNames.length] = className;
+        el.setAttribute("class", classNames.join(" "));
+    }
+
+    function removeClass(el, className) {
+        var classNames = el.getAttribute("class");
+        if (classNames) {
+            var newClassNames = [];
+            classNames.split(" ").forEach(function(c) {
+                if (c !== className) {
+                    newClassNames.push(c);
+                }
+            });
+            el.setAttribute("class", newClassNames.join(" "));
+        }
+    }
 
     function createNote(event) {
 
@@ -48,12 +69,14 @@
 
             mousePressed = true;
             prevMousePos = {left: e.clientX, top: e.clientY};
-            
-            var curContainerClass = container.getAttribute("class");
-            container.setAttribute("class", curContainerClass ? curContainerClass + " dragging" : "dragging");
 
-            var curBodyClass = document.body.getAttribute("class");
-            document.body.setAttribute("class", curBodyClass ? curBodyClass + " dragging-mode" : "dragging-mode");
+            addClass(container, "dragging");
+
+            highestZ++;
+            container.style["z-index"] = highestZ;
+
+            addClass(document.body, "dragging-mode");
+
             document.body.addEventListener("mousemove", onMouseMove);
         };
 
@@ -63,9 +86,9 @@
 
             mousePressed = false;
 
-            container.setAttribute("class", container.getAttribute("class").replace("dragging", ""));
+            removeClass(container, "dragging");
+            removeClass(document.body, "dragging-mode");
 
-            document.body.setAttribute("class", document.body.getAttribute("class").replace("dragging-mode", ""));
             document.body.removeEventListener("mousemove", onMouseMove);
         };
 
@@ -86,7 +109,7 @@
 
             prevMousePos = curMousePos;
         }
-        
+
         onCloseClick = function(e) {
             header.removeEventListener("mousedown", onMouseDown);
             header.removeEventListener("mouseup", onMouseUp);
@@ -97,6 +120,9 @@
         header.addEventListener("mousedown", onMouseDown);
         header.addEventListener("mouseup", onMouseUp);
         btnClose.addEventListener("click", onCloseClick);
+
+        highestZ++;
+        container.style["z-index"] = highestZ;
     }
 
     btnCreate.addEventListener("click", createNote)

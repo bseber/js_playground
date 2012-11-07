@@ -71,7 +71,6 @@ a {
 }
 
 .note.dragging {
-    z-index: 999999;
     box-shadow: 0 0 1.5em #464646;
 }
 
