@@ -20,6 +20,11 @@
             onMouseUp,
             onMouseMove;
 
+        header.setAttribute("class", "header");
+
+        content.setAttribute("class", "content");
+        content.setAttribute("contenteditable", "true");
+
         container.setAttribute("class", "note");
         container.style.top  = "50px";
         container.style.left = "100px";
