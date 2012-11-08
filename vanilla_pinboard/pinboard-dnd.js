@@ -9,6 +9,8 @@ var pinboard_dnd = (function(dom) {
         event.preventDefault();
         event.stopPropagation();
 
+        document.activeElement.blur();
+
         _element = element;
         _mousePressed = true;
         _prevMousePos = {left: event.clientX, top: event.clientY};

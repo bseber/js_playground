@@ -18,13 +18,19 @@
             header.removeEventListener("mousedown", dnd.start);
             header.removeEventListener("mouseup", dnd.stop);
             btnClose.removeEventListener("click", onCloseClick);
+            content.removeEventListener("focus", onContentFocus);
             container.parentNode.removeChild(container);
+        };
+        
+        var onContentFocus = function() {
+            dom.toFront(container);
         };
 
         header.setAttribute("class", "header");
 
         content.setAttribute("class", "content");
         content.setAttribute("contenteditable", "true");
+        content.addEventListener("focus", onContentFocus);
 
         container.setAttribute("class", "note");
         container.style.top  = "50px";
