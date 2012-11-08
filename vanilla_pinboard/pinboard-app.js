@@ -1,31 +1,11 @@
-(function() {
+(function(dom, dnd) {
     "use strict";
 
+    // elements
     var pinboard   = document.getElementById("pinboard")
-        ,btnCreate = document.getElementById("btn-create")
-        ,highestZ  = 42; // random number
+        ,btnCreate = document.getElementById("btn-create");
 
-    function addClass(el, className) {
-        var classNames = el.getAttribute("class");
-        classNames = classNames ? classNames.split(" ") : [];
-        classNames[classNames.length] = className;
-        el.setAttribute("class", classNames.join(" "));
-    }
-
-    function removeClass(el, className) {
-        var classNames = el.getAttribute("class");
-        if (classNames) {
-            var newClassNames = [];
-            classNames.split(" ").forEach(function(c) {
-                if (c !== className) {
-                    newClassNames.push(c);
-                }
-            });
-            el.setAttribute("class", newClassNames.join(" "));
-        }
-    }
-
-    function createNote(event) {
+    btnCreate.addEventListener("click", function() {
 
         // elements
         var container = document.createElement("section")
@@ -33,14 +13,13 @@
             ,toolbar  = document.createElement("div")
             ,content  = document.createElement("div")
             ,btnClose = document.createElement("button");
-
-        // events
-        var mousePressed = false
-            ,prevMousePos
-            ,onMouseDown
-            ,onMouseUp
-            ,onMouseMove
-            ,onCloseClick;
+            
+        var onCloseClick = function() {
+            header.removeEventListener("mousedown", dnd.start);
+            header.removeEventListener("mouseup", dnd.stop);
+            btnClose.removeEventListener("click", onCloseClick);
+            container.parentNode.removeChild(container);
+        };
 
         header.setAttribute("class", "header");
 
@@ -63,68 +42,11 @@
         header.appendChild(toolbar);
         pinboard.appendChild(container);
 
-        onMouseDown = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            mousePressed = true;
-            prevMousePos = {left: e.clientX, top: e.clientY};
-
-            addClass(container, "dragging");
-
-            highestZ++;
-            container.style["z-index"] = highestZ;
-
-            addClass(document.body, "dragging-mode");
-
-            document.body.addEventListener("mousemove", onMouseMove);
-        };
-
-        onMouseUp = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            mousePressed = false;
-
-            removeClass(container, "dragging");
-            removeClass(document.body, "dragging-mode");
-
-            document.body.removeEventListener("mousemove", onMouseMove);
-        };
-
-        onMouseMove = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (!mousePressed) {
-                return false;
-            }
-
-            var curMousePos = {left: e.clientX, top: e.clientY}
-                ,deltaTop   = curMousePos.top - prevMousePos.top
-                ,deltaLeft  = curMousePos.left - prevMousePos.left;
-
-            container.style.top  = (parseInt(container.style.top, 10) + deltaTop) + "px";
-            container.style.left = (parseInt(container.style.left, 10) + deltaLeft) + "px";
-
-            prevMousePos = curMousePos;
-        }
-
-        onCloseClick = function(e) {
-            header.removeEventListener("mousedown", onMouseDown);
-            header.removeEventListener("mouseup", onMouseUp);
-            btnClose.removeEventListener("click", onCloseClick);
-            container.parentNode.removeChild(container);
-        };
-
-        header.addEventListener("mousedown", onMouseDown);
-        header.addEventListener("mouseup", onMouseUp);
+        header.addEventListener("mousedown", function(e) {dnd.start(e, container);});
+        header.addEventListener("mouseup", dnd.stop);
         btnClose.addEventListener("click", onCloseClick);
 
-        highestZ++;
-        container.style["z-index"] = highestZ;
-    }
+        dom.toFront(container);
+    })
 
-    btnCreate.addEventListener("click", createNote)
-
-})();
+})(pinboard_dom_util, pinboard_dnd);
